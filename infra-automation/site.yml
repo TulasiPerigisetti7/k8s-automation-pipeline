@@ -1,5 +1,7 @@
 - name: Setup full DevOps environment
   hosts: localhost
+  become: true
+  become_method: sudo
 
   roles:
     - common
