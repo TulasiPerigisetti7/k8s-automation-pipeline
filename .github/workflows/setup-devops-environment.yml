@@ -19,4 +19,4 @@ jobs:
 
       - name: Run Ansible Playbook to set up DevOps environment
         run: |
-          ansible-playbook -i "localhost," -c local setup-devops-environment.yml
+          ansible-playbook -i "localhost," -c local infra-automation/site.yml
