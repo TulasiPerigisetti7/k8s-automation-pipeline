@@ -26,3 +26,9 @@ jobs:
             echo "Downloading $chart version $VERSION"
             curl -f -u "${{ secrets.ARTIFACTORY_USER_NAME }}:${{ secrets.ARTIFACTORY_PASSWORD }}" -O ${{ secrets.ARTIFACTORY_URL }}/helm-charts/${chart}-${VERSION}.tgz
           done
+
+        
+      - name: List downloaded charts
+        run: |
+          echo "Downloaded charts:"
+          ls -l microservices-platform/charts
