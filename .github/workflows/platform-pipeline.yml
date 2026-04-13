@@ -33,7 +33,7 @@ jobs:
           uses: actions/checkout@v4
         - name: Download charts from JFrog Artifactory
           run: |
-            VERSION=${{ github.event.inputs.version }}
+            VERSION=${{ github.event.inputs.VERSION }}
             mkdir -p microservices-platform/charts
             cd microservices-platform/charts
             
@@ -53,7 +53,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: helm-charts
-            path: platform-chart/microservices-platform/charts
+            path: microservices-platform/charts
 
   deploy-platform:
       needs: download-charts

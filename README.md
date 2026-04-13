@@ -91,14 +91,13 @@ The repository includes GitHub Actions workflows for automated setup, chart mana
 
 ### Full Platform Deployment Pipeline (`platform-pipeline.yml`)
 
-This comprehensive workflow orchestrates the complete deployment process from environment setup to platform deployment:
+This comprehensive workflow orchestrates the complete deployment process from chart downloading to platform deployment (environment setup is currently commented out and can be enabled if needed):
 
 1. **Trigger**: Manual dispatch with version input
 2. **Input**: Chart version (default: 0.1.0)
 3. **Jobs**:
-   - **setup-devops-environment**: Installs Ansible and runs the playbook to set up Docker, kubectl, Minikube, and Helm
-   - **download-charts** (depends on setup-devops-environment): Downloads microservice charts from JFrog Artifactory
-   - **deploy-platform** (depends on download-charts): Updates Helm dependencies and deploys the umbrella chart
+   - **download-charts**: Downloads microservice charts from JFrog Artifactory and uploads them as artifacts
+   - **deploy-platform** (depends on download-charts): Downloads the chart artifacts and deploys the umbrella chart using Helm
 
 **Required Secrets**:
 - `ARTIFACTORY_USER_NAME`: JFrog Artifactory username
