@@ -49,12 +49,23 @@ jobs:
             echo "Downloaded charts:"
             ls -l microservices-platform/charts
 
+        - name: Upload charts
+          uses: actions/upload-artifact@v4
+          with:
+            name: helm-charts
+            path: platform-chart/microservices-platform/charts
+
   deploy-platform:
       needs: download-charts
       runs-on: self-hosted
       steps:
         - name: Checkout repo
           uses: actions/checkout@v4
+        - name: Download charts
+          uses: actions/download-artifact@v4
+          with:
+           name: helm-charts
+           path: platform-chart/microservices-platform/charts
         - name: Install umbrella chart
           run: |
             pwd
