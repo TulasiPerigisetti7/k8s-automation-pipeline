@@ -1,0 +1,22 @@
+# Set up runner to install Ansible, and then run ansible playbook to set up the runner with necessary tools like docker, minikube, kubectl, helm, etc.
+
+name: Setup DevOps Environment
+on: 
+  workflow_dispatch:
+
+jobs:
+  setup-devops-environment: 
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install -y ansible
+
+    #   - name: Run Ansible Playbook to set up DevOps environment
+    #     run: |
+    #       ansible-playbook -i "localhost," -c local setup-devops-environment.yml
