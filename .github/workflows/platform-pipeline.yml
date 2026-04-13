@@ -1,6 +1,12 @@
-name: Setup DevOps Environment
+name: Full Platform Deployment Pipeline
 on: 
   workflow_dispatch:
+   inputs:
+    VERSION:
+      description: 'Chart Version'
+      default: '0.1.0'
+      required: true
+      type: string
 
 jobs:
   setup-devops-environment: 
@@ -18,3 +24,38 @@ jobs:
       - name: Run Ansible Playbook to set up DevOps environment
         run: |
           ansible-playbook -i "localhost," -c local infra-automation/site.yml
+    
+  download-charts:
+      needs: setup-devops-environment
+      runs-on: self-hosted
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+        - name: Download charts from JFrog Artifactory
+          run: |
+            VERSION=${{ github.event.inputs.version }}
+            mkdir -p microservices-platform/charts
+            cd microservices-platform/charts
+            
+            for chart in auth-api frontend users-api todos-api redis-queue zipkin
+            do
+              echo "Downloading $chart version $VERSION"
+              curl -f -u "${{ secrets.ARTIFACTORY_USER_NAME }}:${{ secrets.ARTIFACTORY_PASSWORD }}" -O ${{ secrets.ARTIFACTORY_URL }}/helm-charts/${chart}-${VERSION}.tgz
+            done
+
+          
+        - name: List downloaded charts
+          run: |
+            echo "Downloaded charts:"
+            ls -l microservices-platform/charts
+
+  deploy-platform:
+      needs: download-charts
+      runs-on: self-hosted
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+        - name: Install umbrella chart
+          run: |
+            helm dependency update microservices-platform
+            helm upgrade --install platform microservices-platform
