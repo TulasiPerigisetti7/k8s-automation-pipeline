@@ -15,3 +15,4 @@
 - name: Start Minikube if not running
   shell: minikube start --driver={{ minikube_driver }}
   when: minikube_status.rc != 0
+  become: false
