@@ -23,25 +23,25 @@ version: 0.1.0
 # It is recommended to use it with quotes.
 appVersion: "0.1.0"
 
-dependencies:
-  - name: auth-api
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
-  - name: frontend
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
-  - name: redis-queue
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
-  - name: todos-api
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
-  - name: users-api
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
-  - name: zipkin
-    version: 0.1.0
-    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+# dependencies:
+#   - name: auth-api
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
+#   - name: frontend
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
+#   - name: redis-queue
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
+#   - name: todos-api
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
+#   - name: users-api
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
+#   - name: zipkin
+#     version: 0.1.0
+#     repository: "http://10.0.2.15:9091/artifactory/helm-local"
 
 
     
