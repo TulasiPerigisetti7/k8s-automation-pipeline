@@ -9,24 +9,24 @@ on:
       type: string
 
 jobs:
-#   setup-devops-environment: 
-#     runs-on: self-hosted
-#     steps:
-#       - name: Checkout repo
-#         uses: actions/checkout@v4
-#       - name: Install Ansible
-#         run: |
-#           sudo apt update
-#           sudo apt install -y software-properties-common
-#           sudo add-apt-repository --yes --update ppa:ansible/ansible
-#           sudo apt install -y ansible
+  setup-devops-environment: 
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install -y ansible
 
-#       - name: Run Ansible Playbook to set up DevOps environment
-#         run: |
-#           ansible-playbook -i "localhost," -c local infra-automation/site.yml
+      - name: Run Ansible Playbook to set up DevOps environment
+        run: |
+          ansible-playbook -i "localhost," -c local infra-automation/site.yml
     
   download-charts:
-    #   needs: setup-devops-environment
+      needs: setup-devops-environment
       runs-on: self-hosted
       steps:
         - name: Checkout repo
