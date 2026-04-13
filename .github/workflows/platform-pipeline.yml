@@ -57,5 +57,11 @@ jobs:
           uses: actions/checkout@v4
         - name: Install umbrella chart
           run: |
-            helm dependency update microservices-platform
-            helm upgrade --install platform microservices-platform
+            pwd
+            cd microservices-platform
+            echo "Checking charts directory"
+            ls -ltra charts || true
+            echo "updating dependencies"
+            helm dependency update .
+            echo "Deploying platform chart"
+            helm upgrade --install platform .

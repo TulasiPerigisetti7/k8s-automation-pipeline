@@ -22,7 +22,9 @@ k8s-automation-pipeline/
 │       └── values.yaml       # Default values for all microservices
 └── .github/
     └── workflows/            # GitHub Actions workflows
-        ├── setup-devops-environment.yml
+        ├── platform-pipeline.yml          # Full deployment pipeline
+        ├── setup-devops-environment.yml   # Environment setup only
+        └── download-charts-from-jfrog.yml # Chart download only
         └── download-charts-from-jfrog.yml
 ```
 
@@ -85,11 +87,27 @@ Default values for each microservice are defined in `values.yaml`. These can be 
 
 ## CI/CD Workflows
 
-The repository includes GitHub Actions workflows for automated setup and chart management.
+The repository includes GitHub Actions workflows for automated setup, chart management, and full platform deployment.
+
+### Full Platform Deployment Pipeline (`platform-pipeline.yml`)
+
+This comprehensive workflow orchestrates the complete deployment process from environment setup to platform deployment:
+
+1. **Trigger**: Manual dispatch with version input
+2. **Input**: Chart version (default: 0.1.0)
+3. **Jobs**:
+   - **setup-devops-environment**: Installs Ansible and runs the playbook to set up Docker, kubectl, Minikube, and Helm
+   - **download-charts** (depends on setup-devops-environment): Downloads microservice charts from JFrog Artifactory
+   - **deploy-platform** (depends on download-charts): Updates Helm dependencies and deploys the umbrella chart
+
+**Required Secrets**:
+- `ARTIFACTORY_USER_NAME`: JFrog Artifactory username
+- `ARTIFACTORY_PASSWORD`: JFrog Artifactory password
+- `ARTIFACTORY_URL`: Base URL for JFrog Artifactory
 
 ### Setup DevOps Environment (`setup-devops-environment.yml`)
 
-This workflow automates the provisioning of a DevOps environment on self-hosted runners:
+This standalone workflow automates the provisioning of a DevOps environment on self-hosted runners:
 
 1. **Trigger**: Manual dispatch (`workflow_dispatch`)
 2. **Runner**: Self-hosted
@@ -102,7 +120,7 @@ This workflow ensures that CI/CD runners have all necessary tools pre-installed 
 
 ### Download Charts from JFrog (`download-charts-from-jfrog.yml`)
 
-This workflow handles the retrieval of dependency charts from JFrog Artifactory:
+This standalone workflow handles the retrieval of dependency charts from JFrog Artifactory:
 
 1. **Trigger**: Manual dispatch with version input
 2. **Input**: Chart version (default: 0.1.0)
@@ -133,11 +151,19 @@ This workflow handles the retrieval of dependency charts from JFrog Artifactory:
 
 ### Deploying the Platform
 
-1. Download dependency charts using the "Download Charts from JFrog" workflow
-2. Deploy the umbrella chart:
+#### Option 1: Full Automated Pipeline
+1. Ensure you have a self-hosted GitHub runner configured
+2. Trigger the "Full Platform Deployment Pipeline" workflow with the desired chart version
+3. The workflow will automatically set up the environment, download charts, and deploy the platform
+
+#### Option 2: Manual Steps
+1. Set up the DevOps environment using the "Setup DevOps Environment" workflow
+2. Download dependency charts using the "Download Charts from JFrog" workflow
+3. Deploy the umbrella chart:
 
 ```bash
-helm install microservices-platform ./platform-chart/microservices-platform
+helm dependency update platform-chart/microservices-platform
+helm upgrade --install platform platform-chart/microservices-platform
 ```
 
 ### Local Development
