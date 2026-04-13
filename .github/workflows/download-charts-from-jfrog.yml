@@ -1,27 +1,28 @@
-# This is a basic workflow to help you get started with Actions
+# This is a workflow to download dependency charts from JFrog Artifactory and store them in the 'charts' directory of the repository.
 
-name: CI
+name: Download Charts from JFrog Artifactory
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+   inputs:
+    VERSION:
+      description: 'Version of the charts to download (e.g., 0.1.0)'
+      default: '0.1.0'
+      required: true
+      type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  download-charts:
+    runs-on: self-hosted
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Download charts from JFrog
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          VERSION=${{ github.event.inputs.version }}
+          mkdir -p microservices-platform/charts
+          cd microservices-platform/charts
+          
+          for chart in auth-api frontend users-api todos-api redis-queue zipkin
+          do
+            echo "Downloading $chart version $VERSION"
+            curl -f -u "${{ secrets.ARTIFACTORY_USER_NAME }}:${{ secrets.ARTIFACTORY_PASSWORD }}" -O ${{ secrets.ARTIFACTORY_URL }}/helm-local/${chart}-${VERSION}.tgz
+          done
