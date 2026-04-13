@@ -4,3 +4,4 @@ minikube_version: v1.33.0
 kubectl_version: "stable"
 
 helm_version: v3.15.0
+ansible_user: "tulasi"
