@@ -1,6 +1,6 @@
 apiVersion: v2
 name: microservices-platform
-description: A Helm chart for Kubernetes
+description: Umbrella chart for deploying all microservices
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -21,4 +21,27 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.16.0"
+appVersion: "0.1.0"
+
+dependencies:
+  - name: auth-api
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+  - name: frontend
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+  - name: redis-queue
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+  - name: todos-api
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+  - name: users-api
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+  - name: zipkin
+    version: 0.1.0
+    repository: "http://10.0.2.15:9091/artifactory/helm-local"
+
+
+    
