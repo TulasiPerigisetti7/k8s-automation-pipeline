@@ -1,0 +1,12 @@
+- name: Download Minikube
+  shell: |
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    install minikube-linux-amd64 /usr/local/bin/minikube
+
+- name: Check if Minikube already running
+  shell: minikube status
+  register: minikube_status
+
+- name: Start Minikube if not running
+  shell: minikube start --driver={{ minikube_driver }}
+  when: minikube_status.rc != 0

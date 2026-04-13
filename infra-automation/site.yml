@@ -1,0 +1,9 @@
+- name: Setup full DevOps environment
+  hosts: localhost
+
+  roles:
+    - common
+    - docker
+    - kubectl
+    - minikube
+    - helm
